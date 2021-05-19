@@ -1,0 +1,88 @@
+﻿@{
+	ViewBag.Title = "Upload";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .navigation-bar {
+        background: transparent;
+    }
+    /* ------ RENDER WHITE BA LOGO INSTEAD OF BLACK LOGO ------*/
+    @@media screen and (min-width: 660px) {
+        .navigation-bar a {
+            color: white;
+        }
+
+
+        #BA-logo {
+            content: url("/Content/Images/logo_white.png");
+        }
+    }
+</style>
+
+@using (Html.BeginForm("UploadAsync", "Athlete", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+	<div class="upload-background">
+		<div class="upload-container">
+
+			@*First Row - Title('Upload a Profile Picture')*@
+			<div class="row" style="justify-content: center; text-align-last: center;">
+
+				@*Left Columns - Title and Upload info('Upload a Profile Picture' and 'Choose File' button + conditionally rendered image info text and 'Upload' Button)*@
+				<div class="col-md-6">
+					<div class="upload-title">Upload a Profile Picture</div>
+					<div class="d-flex justify-content-center" style="margin-top: 5%">
+
+						@*'Choose File' button*@
+						<div class="fileUpload btn btn-default">
+							<input type="file" id="file" name="selectFiles" class="upload" onchange="DisplayFilesToUpload()" multiple />
+						</div>
+					</div>
+					<script class="imageInfo">
+
+						// Lists the file name and size for all files (allowing only one file to be uploaded/displayed at a time for this application) to be uploaded by updating the <p id="FilesToUpload"></p> control
+						function DisplayFilesToUpload() {
+							var element = document.getElementById("file");
+							var html = "";
+
+							// Conditionally rendered image info text for Filename and file size
+							html = "<h3>Image to Upload</h3>"
+							for (var i = 0; i < element.files.length; i++) {
+								html += "<strong>" + (i + 1) + "</strong>. Filename: ";
+								var file = element.files[i];
+								if ('name' in file) { html += file.name + " ("; }
+								if ('size' in file) { html += "size: " + file.size + " bytes)<br>"; }
+							}
+
+							// A conditionally rendered Upload button appears once the user has selected a picture to upload
+							html += "<div class='fileUpload btn btn-default'><input type='submit' class='upload' value='Upload' /></div>"
+							document.getElementById("FilesToUpload").innerHTML = html;
+						}
+					</script>
+
+					@* This gets populated from the DisplayFilesToUpload() JS function*@
+					<p id="FilesToUpload" style="margin-top: 5%"></p>
+				</div>
+
+				@*Right Column - Image*@
+				<div class="col-md-4" style="height:300px">
+
+						@*If the model does not equal null, display/upload the chosen image as the profile picture*@
+						@if (Model != null)
+						{
+							<div class="imageBlock" style="float: left">
+								<a href="@Model" target="_blank"><img class="thumb" src="@Model" alt="profile image" /></a>
+							</div>
+						}
+						// Else if there is no chosen/uploaded profile image or the user is new, display the default image.
+						else 
+						{ 
+							<div class="imageBlock" style="float: left">
+								<img class="thumb" src="https://www.searchpng.com/wp-content/uploads/2019/02/Profile-PNG-Icon.png" alt="default-empty-image" />
+							</div>
+						}
+				</div>
+			</div>
+		</div>
+	</div>
+}

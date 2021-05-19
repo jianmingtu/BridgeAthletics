@@ -1,0 +1,187 @@
+﻿
+@model Athletes.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout_Register.cshtml";
+
+}
+
+
+<div class="regiester-body">
+
+
+    <div class="register-form-container">
+        <div class="register-form-title">Register</div>
+        <div class="register-form-title-underline"></div>
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            @Html.TextBoxFor(m => m.Email, new { @class = "register-input mx-0 my-2 py-1", placeholder = "Email Address" })
+
+
+            @Html.PasswordFor(m => m.Password, new { @class = "register-input mx-0 my-2 py-1", placeholder = "Password" })
+
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "register-input mx-0 my-2 py-1", placeholder = "Confirmed Password" })
+
+            <div class="row d-flex align-items-center mx-0 my-3 p-0">
+
+                <div class="register-radios">I am a:</div>
+                <div class="form-check d-flex mx-2">
+                    <input class="form-check-input" type="radio" name="SelectedUser" value="coach" id="Coach">
+                    <label class="form-check-label coach" for="Coach">Coach</label>
+                </div>
+                <div class="form-check d-flex mx-2">
+                    <input class="form-check-input " type="radio" name="SelectedUser" value="athlete" id="Athlete">
+                    <label class="form-check-label athlete" for="Athlete">Athlete</label>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-between align-items-center mx-0 my-3 p-0">
+                <div class="col-md-6 col-ms-12 mx-0 my-2 p-0">
+                    <div class="register-select-list program-list" style="display:none">
+                        @*Program drop-down is required on registering a coach*@
+                        <select name="SelectedProgram" class="select-program-list register-select-item" required>
+                            <option value="" disabled selected>Select Program</option>
+                            <option value="Mens">Mens</option>
+                            <option value="Womens">Womens</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-ms-12 my-2 p-0">
+                    <div class="register-select-list school-dropdown" style="display:none">
+                    </div>
+                </div>
+            </div>
+
+            <br class="py-6" />
+
+            <div class="mb-3" style="font-size: 0.9rem"> Already have an account? <a href="Login" class="font-italic">Sign in here</a></div>
+
+            <div class="register-submit-button-container">
+                <input type="submit" class="btn btn-default  register-submit-button" value="Register" />
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+
+    let MensSchools = [];
+    let WomensSchools =  [];
+    window.onload = function () {
+
+        // get the RegisterViewModel object in Javascript
+        let modelStr = '@Html.Raw(Json.Encode(Model))';
+        let model = JSON.parse(modelStr);
+        MensSchools = JSON.parse(modelStr).SchoolNames;
+        WomensSchools = JSON.parse(modelStr).SchoolNames;
+
+        // build mens' and womens' school list
+        model.Schools.forEach(
+            school => {
+                if (!!school.MensCoach && !!school.WomensCoach) {
+                    MensSchools.splice(MensSchools.findIndex(s => s.ID == school.ID), 1);
+                    WomensSchools.splice(WomensSchools.findIndex(s => s.ID == school.ID), 1);
+                }
+                else if (!!school.WomensCoach) {
+                    WomensSchools.splice(WomensSchools.findIndex(s => s.ID == school.ID), 1);
+                }
+                else if (!!school.MensCoach) {
+                    MensSchools.splice(MensSchools.findIndex(s => s.ID == school.ID), 1);
+                }
+            }
+        )
+    }
+
+    function getSelectedProgram() {
+        const select = document.querySelector(".select-program-list");
+        const value = select.value;
+        return value;
+    }
+
+
+    function AddSchoolDropDown(program) {
+
+        // get program
+        var program = getSelectedProgram();
+
+        //Create the DropDownList schools.
+        var select = document.createElement("select");
+        select.setAttribute('class', 'school-list register-select-item');
+        select.setAttribute('name', "SelectedSchool");
+
+        // School drop-down is required on registering a coach
+        select.setAttribute('required', true);
+
+        // add the display option
+        var option = document.createElement("option");
+        option.innerHTML = "Select School";
+        option.setAttribute('disabled', true);
+        option.setAttribute('selected', true);
+        option.setAttribute('value', 0);
+        select.options.add(option);
+
+        //Add the Options to the DropDownList.
+        var schools = program === "Mens" ? MensSchools : WomensSchools;
+
+        for (var i = 0; i < schools.length; i++) {
+            var option = document.createElement("OPTION");
+
+            //Set Customer Name in Text part.
+            option.innerHTML = schools[i].Name;
+
+            //Set CustomerId in Value part.
+            option.value = schools[i].ID;
+
+            //Add the Option element to DropDownList.
+            select.options.add(option);
+        }
+
+        //Reference the container DIV.
+        var selectContainer = document.querySelector(".school-dropdown");
+        selectContainer.removeChild(selectContainer.firstChild)
+        selectContainer.setAttribute('style', 'display : block');
+
+        selectContainer.appendChild(select);
+    };
+
+    document.querySelector("#Coach").onclick = function () {
+        document.querySelector('.program-list').style.display = "block";
+
+        let programElem = document.querySelector(".select-program-list");
+        if (programElem) programElem.setAttribute('required', true);
+
+        let schoolElem = document.querySelector(".school-list");
+        if (schoolElem) schoolElem.setAttribute('required', true);
+    }
+
+    document.querySelector(".select-program-list").onchange = function () {
+        AddSchoolDropDown()
+    }
+
+    // hide the Program and School drop-down lists on registering an athlete and remove their 'required' attributes
+    document.querySelector("#Athlete").onclick = function () {
+        document.querySelector('.program-list').style.display = "none";
+        document.querySelector('.school-dropdown').style.display = "none";
+
+
+        let programElem = document.querySelector(".select-program-list");
+        if (programElem) programElem.removeAttribute('required');
+
+        let schoolElem = document.querySelector(".school-list");
+        if (schoolElem) schoolElem.removeAttribute('required');
+
+
+    }
+
+
+</script>

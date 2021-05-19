@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .navigation-bar {
+        background: transparent;
+    }
+    /* ------ RENDER WHITE BA LOGO INSTEAD OF BLACK LOGO ------*/
+    @@media screen and (min-width: 660px) {
+        .navigation-bar a {
+            color: white;
+        }
+
+
+        #BA-logo {
+            content: url("/Content/Images/logo_white.png");
+        }
+    }
+</style>
+@* ---- Allow React to access profile img url ---- *@
+<input id="imgUrl" type="hidden" value=@Model>
+
+@* FOR REACT RENDERING OF ATHLETE PROFILE *@
+<div id="root"></div>
+@Scripts.Render("~/Scripts/dist/index.js")

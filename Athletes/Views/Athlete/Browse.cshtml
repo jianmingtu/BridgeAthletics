@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Athletes.Models.Athlete>
+
+@{
+    ViewBag.Title = "Browse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="heading-wrapper">
+        <h2 class="text-center" >Athlete Directory</h2>
+    </div>
+    
+    <div>
+    @using (Html.BeginForm())
+        {
+        <div style="margin-bottom: 1em;">
+            Gender: @Html.DropDownList("athleteGender", "All") <!--HTML helpers create the dropdown list-->
+            Position: @Html.DropDownList("athletePosition", "All") <!--HTML helpers create the dropdown list-->
+            Name: @Html.TextBox("SearchString") <!--HTML helper creates the text input for search-->
+            <input class="border border-dark rounded" type="submit" value="Filter" />
+        </div>
+    }
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <!--Displays collumn names from Athlete DB in table headings-->
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Position)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) // loop for displaying athlete entries in DB
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName) <!--directs the HTML helper to render a table entry for each first name -->
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName) <!--directs the HTML helper to render a table entry for each first name -->
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Gender) <!--directs the HTML helper to render a table entry for each first name -->
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Position) <!--directs the HTML helper to render a table entry for each first name -->
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

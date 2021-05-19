@@ -1,0 +1,13 @@
+﻿// set up an environment to use babel and webconfig to run react
+
+{
+  "presets": [
+    "@babel/preset-react"
+  ],
+  "plugins": [
+  ]
+}
+
+
+
+//https://reciosonny.com/how-to-integrate-reactjs-in-existing-asp-net-mvc-app/

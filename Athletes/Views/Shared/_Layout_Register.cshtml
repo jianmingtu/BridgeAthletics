@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Athletes</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body class="register-background-image">
+    <div>
+        <div class="navbar navbar-expand register-nav-bar">
+            <div class="container-fluid">
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="navbarContent" class="navbar-collapse collapse justify-content-end align-content-center mr-3">
+                    @Html.Partial("_LoginPartial")
+                </div>
+
+            </div>
+        </div>
+        <div class="register-logo-container">
+            <a href="/">
+                <img src="/Content/Images/logo_black.png" alt="Bridge Athletics Logo" class="register-logo" />
+            </a>
+        </div>
+    </div>
+   
+    <div>
+        @RenderBody()
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <!-- Load React. -->
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

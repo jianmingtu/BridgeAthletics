@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Athletes.ViewModels.CoachViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container-fluid">
+    <div class="heading-wrapper">
+        <h2 class="text-center">Coaches Directory</h2>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Coach.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Coach.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Coach.HeadCoach)
+                </th>
+                <th>
+                    School
+                </th>
+            </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Coach.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Coach.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Coach.HeadCoach)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Coach.School.Name)
+                    </td>
+                </tr>
+            }
+
+    </table>
+</div>

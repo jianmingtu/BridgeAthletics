@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="homepage">
+
+    @section Head{
+        <style>
+            .navigation-bar {
+                display: none;
+            }
+
+            body {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+        </style>
+    }
+
+    <div class="homepage-overlay">
+        <div class="hompage-img-logo">
+            <img src="~/Content/Images/logo_white.png" />
+        </div>
+        <div class="navbar-nav hompage-auth-buttons">
+            <div class="register-button">
+                @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "nav-link", id = "registerLink" })
+            </div>
+            <div class="login-button">
+                @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "nav-link", id = "loginLink" })
+            </div>
+        </div>
+    </div>
+</div>

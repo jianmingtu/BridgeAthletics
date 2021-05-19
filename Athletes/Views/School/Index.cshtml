@@ -1,0 +1,8 @@
+﻿@model IEnumerable<Athletes.Models.School>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* FOR REACT RENDERING OF SCHOOL PROFILE *@
+<div id="root"></div>
+@Scripts.Render("~/Scripts/dist/index.js")
